@@ -5,7 +5,7 @@ import { prisma } from "../lib/prisma";
 import { logger } from "../lib/logger";
 
 
-export const registerUser = async(res:Response, req:Request) => {
+export const registerUser = async(req:Request, res:Response) => {
     try{
         const {name, email, password, role} = req.body;
         if(!name || !email || !password){
