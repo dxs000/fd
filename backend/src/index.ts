@@ -5,6 +5,8 @@ import cookieParser from "cookie-parser";
 import { logger } from "./lib/logger";
 import pinoHttp from "pino-http";
 
+import authRoutes from "./routes/auth.route";
+
 const PORT = process.env.PORT || 8000
 
 const app = express();
@@ -26,6 +28,9 @@ app.use(cookieParser());
 app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
 });
+
+//API ENDPOINTS
+app.use("/api/auth", authRoutes);
 
 app.listen(PORT, () => {
     logger.info({ port: PORT }, "server started");
