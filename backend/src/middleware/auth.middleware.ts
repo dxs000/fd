@@ -14,7 +14,7 @@ export const protect = async(req:Request, res:Response, next:NextFunction) => {
             });
         }
 
-        const decoded = await jwt.verify(token, SECRET);
+        const decoded = jwt.verify(token, SECRET) as { userId: string };
 
         const user = await prisma.user.findUnique({
             where:{
@@ -29,7 +29,8 @@ export const protect = async(req:Request, res:Response, next:NextFunction) => {
             })
         }
 
-        req.user = user;
+        const { password: _, ...safeUser } = user;
+        req.user = safeUser;
         next();
 
     } catch(error: any){

@@ -1,3 +1,5 @@
+import { cons } from './../../node_modules/effect/src/List';
+import { error } from './../../node_modules/ajv/lib/vocabularies/applicator/dependencies';
 import bcrypt from "bcryptjs";
 import type {Response, Request} from "express";
 import { generateToken } from "../lib/generateToken";
@@ -134,6 +136,15 @@ export const logoutUser = async (req:Request, res:Response) => {
             message: "Logged out sucessfully"
         });
     } catch(error:any){
+        logger.info(error.message, "registration error");
+        return res.status(500).json({"success": false, "message":error.message})
+    }
+}
+
+export const getMe = async(req:Request, res:Response) => {
+    try{
+        res.status(200).json({success: true, user: req.user})
+    } catch(error: any){
         logger.info(error.message, "registration error");
         return res.status(500).json({"success": false, "message":error.message})
     }
