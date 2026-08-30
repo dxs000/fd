@@ -6,7 +6,7 @@
     "outDir": "dist",
     "target": "ES2022",
     "module": "CommonJS",
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
