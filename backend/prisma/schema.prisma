@@ -14,7 +14,7 @@ datasource db {
 
 enum Role{
 	ADMIN
-	RESTURANT_OWNER
+	RESTAURANT_OWNER
 	CUSTOMER
 }
 
@@ -27,7 +27,47 @@ model User {
   avatar String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  restaurants Restaurant[]
 
   @@map("users")
-} 
+}
+
+model Restaurant {
+  id String @id @default(cuid())
+  name String
+  slug String @unique
+  description String?
+  logo String?
+  coverImage String?
+  phone String?
+  email String?
+  address String
+  city String
+  openingTime String
+  closingTime String
+  isOpen Boolean @default(true)
+  rating Float @default(0)
+  totalReview Int @default(0)
+  ownerId String
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  caregories Category[]
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  @@map("restaurants")
+}
+
+model Category {
+  id String @id @default(cuid())
+  name String
+  slug String
+  image String?
+  restaurantId String
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  @@unique([slug, restaurantId])
+  @@map("categories")
+}
 

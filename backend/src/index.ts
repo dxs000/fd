@@ -6,6 +6,7 @@ import { logger } from "./lib/logger";
 import pinoHttp from "pino-http";
 
 import authRoutes from "./routes/auth.route";
+import restaurantRoute from "./routes/restaurant.route";
 
 const PORT = process.env.PORT || 8000
 
@@ -31,6 +32,7 @@ app.get("/health", (_req, res) => {
 
 //API ENDPOINTS
 app.use("/api/auth", authRoutes);
+app.use("/api/restaurant", restaurantRoute);
 
 app.listen(PORT, () => {
     logger.info({ port: PORT }, "server started");
