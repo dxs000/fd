@@ -71,3 +71,14 @@ model Category {
   @@map("categories")
 }
 
+model Food {
+  id String @id @default(cuid())
+  name String
+  slug String
+  description String?
+  image String?
+  price Float
+  isAvailable Boolean @default(true)
+
+}
+

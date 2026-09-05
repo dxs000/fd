@@ -237,6 +237,8 @@ export const getSingleCategory = async (req: Request, res: Response) => {
 export const updateCategory = async (req: Request, res: Response) => {
   try {
     const id = getParam(req, "id");
+    const { name } = req.body as { name?: string };
+    
     if (!id) {
       return res.status(400).json({
         success: false,
@@ -269,9 +271,7 @@ export const updateCategory = async (req: Request, res: Response) => {
         message: "You are not authorized to update this category",
       });
     }
-
-    const { name } = req.body as { name?: string };
-
+    
     let nextSlug = category.slug;
     let nextName = category.name;
 
