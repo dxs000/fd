@@ -60,7 +60,7 @@ model Restaurant {
 model Category {
   id String @id @default(cuid())
   name String
-  slug String
+  slug String @unique
   image String?
   restaurantId String
   restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
