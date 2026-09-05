@@ -12,73 +12,82 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Role{
-	ADMIN
-	RESTAURANT_OWNER
-	CUSTOMER
+enum Role {
+  ADMIN
+  RESTAURANT_OWNER
+  CUSTOMER
 }
 
-model User { 
-  id    String     @id @default(cuid())
-  name  String
-  email String  @unique
-  password String
-  role Role @default(CUSTOMER)
-  avatar String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model User {
+  id          String       @id @default(cuid())
+  name        String
+  email       String       @unique
+  password    String
+  role        Role         @default(CUSTOMER)
+  avatar      String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   restaurants Restaurant[]
 
   @@map("users")
 }
 
 model Restaurant {
-  id String @id @default(cuid())
-  name String
-  slug String @unique
+  id          String     @id @default(cuid())
+  name        String
+  slug        String     @unique
   description String?
-  logo String?
-  coverImage String?
-  phone String?
-  email String?
-  address String
-  city String
+  logo        String?
+  coverImage  String?
+  phone       String?
+  email       String?
+  address     String
+  city        String
   openingTime String
   closingTime String
-  isOpen Boolean @default(true)
-  rating Float @default(0)
-  totalReview Int @default(0)
-  ownerId String
-  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  caregories Category[]
-  createdAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  isOpen      Boolean    @default(true)
+  rating      Float      @default(0)
+  totalReview Int        @default(0)
+  ownerId     String
+  owner       User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  categories  Category[]
+  foods       Food[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
   @@map("restaurants")
 }
 
 model Category {
-  id String @id @default(cuid())
-  name String
-  slug String @unique
-  image String?
+  id           String     @id @default(cuid())
+  name         String
+  slug         String
+  image        String?
   restaurantId String
-  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  foods        Food[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 
   @@unique([slug, restaurantId])
   @@map("categories")
 }
 
 model Food {
-  id String @id @default(cuid())
-  name String
-  slug String
-  description String?
-  image String?
-  price Float
-  isAvailable Boolean @default(true)
+  id           String     @id @default(cuid())
+  name         String
+  slug         String
+  description  String?
+  image        String?
+  price        Float
+  isAvailable  Boolean    @default(true)
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  categoryId   String
+  category     Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 
+  @@unique([slug, restaurantId])
+  @@map("foods")
 }
-

@@ -3,32 +3,35 @@ import express from "express";
 import { protect } from "../middleware/auth.middleware";
 import { authorize } from "../middleware/authorize.middleware";
 import {
-  createCategory,
-  deleteCategory,
-  getAllCategories,
-  getRestaurantCategories,
-  getSingleCategory,
-  updateCategory,
-} from "../controllers/category.controller";
+  createFood,
+  deleteFood,
+  getAllFoods,
+  getCategoryFoods,
+  getRestaurantFoods,
+  getSingleFood,
+  updateFood,
+} from "../controllers/food.controller";
 
 const router = express.Router();
+
 router.post(
   "/create",
   protect,
   authorize("RESTAURANT_OWNER"),
   upload.single("image"),
-  createCategory
+  createFood
 );
 router.patch(
   "/update/:id",
   protect,
   authorize("RESTAURANT_OWNER"),
   upload.single("image"),
-  updateCategory
+  updateFood
 );
-router.delete("/delete/:id", protect, authorize("RESTAURANT_OWNER"), deleteCategory);
-router.get("/all", getAllCategories);
-router.get("/restaurant/:restaurantId", getRestaurantCategories);
-router.get("/:id", getSingleCategory);
+router.delete("/delete/:id", protect, authorize("RESTAURANT_OWNER"), deleteFood);
+router.get("/all", getAllFoods);
+router.get("/restaurant/:restaurantId", getRestaurantFoods);
+router.get("/category/:categoryId", getCategoryFoods);
+router.get("/:id", getSingleFood);
 
 export default router;
