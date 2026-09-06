@@ -36,19 +36,18 @@ function parseIsAvailable(value: unknown): boolean | undefined {
 
 export const createFood = async (req: Request, res: Response) => {
   try {
-    const { name, description, price, categoryId, restaurantId, isAvailable } = req.body as {
+    const { name, description, price, categoryId, restaurantId} = req.body as {
       name?: string;
       description?: string;
       price?: unknown;
       categoryId?: string;
       restaurantId?: string;
-      isAvailable?: unknown;
     };
 
-    if (!name?.trim() || !categoryId || !restaurantId) {
+    if (!name?.trim() || !price || !categoryId || !restaurantId) {
       return res.status(400).json({
         success: false,
-        message: "Name, categoryId and restaurantId are required.",
+        message: "Name, price, categoryId and restaurantId are required.",
       });
     }
 
@@ -116,15 +115,29 @@ export const createFood = async (req: Request, res: Response) => {
       imageUrl = await uploadImageToStorage(req.file.path);
     }
 
-    const available = parseIsAvailable(isAvailable);
+    const existingFood = await prisma.food.findUnique({
+      where:{
+        slug_restaurantId:{
+          slug,
+          restaurantId
+        }
+      }
+    })
 
+    if(existingFood) {
+      return res.status(400).json({
+        success: false,
+        message: "Food already exists in this restaurant",
+      });
+    }
+
+    
     const food = await prisma.food.create({
       data: {
         name: name.trim(),
         slug,
         description: description?.trim() || null,
         price: parsedPrice,
-        isAvailable: available ?? true,
         restaurantId,
         categoryId,
         image: imageUrl,

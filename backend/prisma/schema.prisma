@@ -25,6 +25,7 @@ model User {
   password    String
   role        Role         @default(CUSTOMER)
   avatar      String?
+  cart        Cart?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   restaurants Restaurant[]
@@ -85,9 +86,36 @@ model Food {
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   categoryId   String
   category     Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  cartItem     CartItem[]
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
   @@unique([slug, restaurantId])
   @@map("foods")
+}
+
+model Cart {
+  id String @id @default(cuid())
+  userId String @unique
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items CartItem[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("carts")
+}
+
+model CartItem {
+  id String @id @default(cuid())
+
+  cartId String
+  cart Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  goodId String
+  good Food @relation(fields: [goodId], references: [id], onDelete: Cascade)
+  quantity Int @default(1) 
+
+  @@unique([cartId, goodId])
+
+  @@map("cart_items")
+
 }
