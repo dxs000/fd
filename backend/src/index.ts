@@ -9,6 +9,7 @@ import authRoutes from "./routes/auth.route";
 import restaurantRoute from "./routes/restaurant.route";
 import categoryRoute from "./routes/category.routes";
 import foodRoute from "./routes/food.routes";
+import cartRoute from "./routes/cart.routes";
 
 const PORT = process.env.PORT || 8000;
 
@@ -37,6 +38,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/restaurant", restaurantRoute);
 app.use("/api/categories", categoryRoute);
 app.use("/api/foods", foodRoute);
+app.use("/api/cart", cartRoute);
 
 app.listen(PORT, () => {
   logger.info({ port: PORT }, "server started");
